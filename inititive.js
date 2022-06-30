@@ -44,20 +44,34 @@ function CreateTD()
     return document.createElement("td");
 }
 
-function AddRow()
+function CreateOption(name)
+{
+    var opt = document.createElement("li");
+    var check = document.createElement("input");
+    check.type = "checkbox";
+    opt.appendChild(check);
+    
+    opt.innerHTML += name;
+    return opt;
+}
+
+function AddRow(inititive = null, name = "", currentHP = 0, maxHP = null, notes = "")
 {
     var elm = document.createElement("tr");
     elm.classList.add("inititiveSlot");
 
-    var tds = [CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD()];
+    var tds = [CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD()];
 
     var initInput = document.createElement("input");
     initInput.type = "number";
+    initInput.value = inititive;
     initInput.classList.add("inititive");
     tds[0].appendChild(initInput);
     
     var nameInput = document.createElement("input");
     nameInput.type = "text";
+
+    nameInput.value = name;
     nameInput.classList.add("name");
     tds[1].appendChild(nameInput);
 
@@ -86,11 +100,17 @@ function AddRow()
 
     var hpInfo = document.createElement("div");
     var h1 = document.createElement("h1");
-    h1.innerHTML = "0 /";
+    h1.innerHTML = currentHP + " /";
     hpInfo.appendChild(h1);
 
     var maxHPinput = document.createElement("input");
     maxHPinput.type = "number";
+    maxHPinput.value = maxHP;
+
+    if (maxHP != null)
+    {
+        maxHPinput.classList.add("used");
+    }
 
     hpInfo.appendChild(maxHPinput);
 
@@ -98,33 +118,70 @@ function AddRow()
 
     tds[2].appendChild(hpBox);
 
+
+    // var conditionsDropdownDiv = document.createElement("div");
+
+    // var conditionsDropdownSpan = document.createElement("span");
+    // conditionsDropdownSpan.innerHTML = "Conditions";
+    // conditionsDropdownDiv.tabIndex = "10";
+    // conditionsDropdownDiv.classList.add("dropdown-check-list");
+
+    // var conditionsDropdownUl = document.createElement("ul");
+    // const conditionsOptions = [
+    //     CreateOption("Blinded"),
+    //     CreateOption("Charmed"),
+    //     CreateOption("Deafened"),
+    //     CreateOption("Frightened"),
+    //     CreateOption("Grappled"),
+    //     CreateOption("Incapacitated"),
+    //     CreateOption("Invisible"),
+    //     CreateOption("Paralyzed"),
+    //     CreateOption("Petrified"),
+    //     CreateOption("Poisoned"),
+    //     CreateOption("Prone"),
+    //     CreateOption("Restrained"),
+    //     CreateOption("Stunned"),
+    //     CreateOption("Unconscious")
+    // ];
+    
+    // for (let i = 0; i < conditionsOptions.length; i++)
+    // {
+    //     const opt = conditionsOptions[i];
+    //     conditionsDropdownUl.appendChild(opt);
+    // }
+
+    // conditionsDropdownDiv.appendChild(conditionsDropdownSpan);
+    // conditionsDropdownDiv.appendChild(conditionsDropdownUl);
+    // conditionsDropdownUl.tabIndex = "10";
+    // conditionsDropdownUl.style.display = "none";
+
+    // var dropdownVisible = false;
+    // conditionsDropdownSpan.addEventListener("click", () => 
+    // {
+    //     if (dropdownVisible)
+    //     {
+    //         conditionsDropdownUl.style.display = null;
+    //     }
+    //     else
+    //     {
+    //         conditionsDropdownUl.style.display = "none";
+    //     }
+    //     dropdownVisible = !dropdownVisible;
+    // });
+    // conditionsDropdownDiv.addEventListener("blur", () => {conditionsDropdownUl.style.display = "none"; dropdownVisible = false;});
+
+    // tds[3].appendChild(conditionsDropdownDiv);
+
     var textarea = document.createElement("textarea");
     textarea.classList.add("notes");
+    textarea.value = notes;
 
-    tds[3].appendChild(textarea);
+    tds[4].appendChild(textarea);
 
     var deleteButton = document.createElement("button");
     deleteButton.innerHTML = "<i class=\"fa fa-trash\"></i>";
-    deleteButton.style.backgroundColor = "#00000000";
-    deleteButton.style.border = "none";
-    tds[4].appendChild(deleteButton);
-
-    // elm.innerHTML = "<td><input class=\"inititive\" type=\"number\"></td>\
-    // <td><input class=\"name\" type=\"text\"></td>\
-    // <td>\
-    //     <div class=\"hpBox\">\
-    //         <div>\
-    //             <button class=\"heal\">Heal</button>\
-    //             <input type=\"number\">\
-    //             <button class=\"damage\">Damage</button>\
-    //         </div>\
-    //         <div>\
-    //             <h1>55/</h1>\
-    //             <input type=\"number\">\
-    //         </div>\
-    //     </div>\
-    // </td>\
-    // <td><textarea class=\"notes\"></textarea></td>";
+    deleteButton.classList.add("deleteButton");
+    tds[5].appendChild(deleteButton);
 
     var table = document.querySelector("table");
 
@@ -133,6 +190,7 @@ function AddRow()
     elm.appendChild(tds[2]);
     elm.appendChild(tds[3]);
     elm.appendChild(tds[4]);
+    elm.appendChild(tds[5]);
 
     table.appendChild(elm);
     
@@ -142,7 +200,19 @@ function AddRow()
     };
 
     initInput.addEventListener("focusout", sort);
-    initInput.addEventListener("keyup", (e) => {if (e.key === "Enter") {e.preventDefault(); sort();}});
+    initInput.addEventListener("keyup", (e) => {if (e.key === "Enter") {sort();}});
+    
+    var updateCurrentHpMonMaxChange = () => 
+    {
+        if ((h1.innerHTML == "0 /") && (maxHPinput.value != ""))
+        {
+            h1.innerHTML = maxHPinput.value + " /";
+            maxHPinput.classList.add("used");
+        }
+    };
+    
+    maxHPinput.addEventListener("focusout", updateCurrentHpMonMaxChange);
+    maxHPinput.addEventListener("keyup", (e) => {if (e.key === "Enter") {updateCurrentHpMonMaxChange();}});
 
     healBtn.addEventListener("click", () => 
     {
@@ -174,7 +244,10 @@ function AddRow()
     deleteButton.addEventListener("click", () => 
     {
         elm.remove();
+        UpdateCurrentTurnDisplay();
     });
+
+    sort();
 }
 
 var currentTurn = 0;
@@ -196,21 +269,29 @@ var round = 1;
             round++;
         }
 
-        for (let i = 1 ; i < table.children.length; i++)
+        UpdateCurrentTurnDisplay();
+    });
+
+
+    var checkboxDropdowns = document.getElementsByClassName("dropdown-check-list");
+    for (let i = 0; i < checkboxDropdowns.length; i++)
+    {
+        const drop = checkboxDropdowns[i];
+        const ul = drop.querySelector("ul");
+
+        drop.querySelector("span").addEventListener("click", () => 
         {
-            const slot = table.children[i];
-            if (i == currentTurn)
+            if (ul.style.display == "none")
             {
-                slot.classList.add("active");
+                ul.style.display = null;
             }
             else
             {
-                slot.classList.remove("active");
+                ul.style.display = "none";
             }
-        }
-
-        document.querySelector(".nextTurn").innerHTML = "<i class=\"fa fa-arrow-right\"></i> Next Turn<br>Round: " + round;
-    });
+        });
+        drop.addEventListener("blur", () => {ul.style.display = "none"});
+    }
 })();
 
 
@@ -239,4 +320,24 @@ function SetPopupState(state)
     {
         popup.classList.remove("active");
     }
+}
+
+function UpdateCurrentTurnDisplay()
+{    
+    var table = document.querySelector("table");
+
+    for (let i = 1 ; i < table.children.length; i++)
+    {
+        const slot = table.children[i];
+        if (i == currentTurn)
+        {
+            slot.classList.add("active");
+        }
+        else
+        {
+            slot.classList.remove("active");
+        }
+    }
+
+    document.querySelector(".nextTurn").innerHTML = "<i class=\"fa fa-arrow-right\"></i> Next Turn<br>Round: " + round;
 }
