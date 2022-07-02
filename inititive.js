@@ -55,7 +55,7 @@ function CreateOption(name)
     return opt;
 }
 
-function AddRow(inititive = null, name = "", currentHP = 0, maxHP = null, notes = "")
+function AddRow(inititive = null, name = "", currentHP = 0, maxHP = null, notes = "", conditions = null)
 {
     var elm = document.createElement("tr");
     elm.classList.add("inititiveSlot");
@@ -119,58 +119,110 @@ function AddRow(inititive = null, name = "", currentHP = 0, maxHP = null, notes 
     tds[2].appendChild(hpBox);
 
 
-    // var conditionsDropdownDiv = document.createElement("div");
+    var conditionsDropdownDiv = document.createElement("div");
+    conditionsDropdownDiv.classList.add("conditions");
 
-    // var conditionsDropdownSpan = document.createElement("span");
-    // conditionsDropdownSpan.innerHTML = "Conditions";
+    var conditionsDropdownSpan = document.createElement("span");
+    conditionsDropdownSpan.innerHTML = "Conditions";
     // conditionsDropdownDiv.tabIndex = "10";
-    // conditionsDropdownDiv.classList.add("dropdown-check-list");
+    conditionsDropdownDiv.classList.add("dropdown-check-list");
 
-    // var conditionsDropdownUl = document.createElement("ul");
-    // const conditionsOptions = [
-    //     CreateOption("Blinded"),
-    //     CreateOption("Charmed"),
-    //     CreateOption("Deafened"),
-    //     CreateOption("Frightened"),
-    //     CreateOption("Grappled"),
-    //     CreateOption("Incapacitated"),
-    //     CreateOption("Invisible"),
-    //     CreateOption("Paralyzed"),
-    //     CreateOption("Petrified"),
-    //     CreateOption("Poisoned"),
-    //     CreateOption("Prone"),
-    //     CreateOption("Restrained"),
-    //     CreateOption("Stunned"),
-    //     CreateOption("Unconscious")
-    // ];
+    var conditionsDropdownUl = document.createElement("ul");
+    const conditionsOptions = [
+        CreateOption("Blinded"),
+        CreateOption("Charmed"),
+        CreateOption("Deafened"),
+        CreateOption("Frightened"),
+        CreateOption("Grappled"),
+        CreateOption("Incapacitated"),
+        CreateOption("Invisible"),
+        CreateOption("Paralyzed"),
+        CreateOption("Petrified"),
+        CreateOption("Poisoned"),
+        CreateOption("Prone"),
+        CreateOption("Restrained"),
+        CreateOption("Stunned"),
+        CreateOption("Unconscious")
+    ];
+
+    if (conditions != null)
+    {
+        for (let i = 0; i < conditionsOptions.length; i++)
+        {
+            const opt = conditionsOptions[i];
+            if (conditions[i] == true)
+            {
+                opt.firstChild.checked = true;
+            }
+        }
+    }
     
-    // for (let i = 0; i < conditionsOptions.length; i++)
-    // {
-    //     const opt = conditionsOptions[i];
-    //     conditionsDropdownUl.appendChild(opt);
-    // }
+    const EnsureDropdownVisibility = () => 
+    {
+        var boxexChecked = false;
 
-    // conditionsDropdownDiv.appendChild(conditionsDropdownSpan);
-    // conditionsDropdownDiv.appendChild(conditionsDropdownUl);
+        if (dropdownVisible)
+        {
+            conditionsDropdownDiv.classList.add("active");
+            for (let i = 0; i < conditionsOptions.length; i++)
+            {
+                const elm = conditionsOptions[i];
+                elm.classList.remove("hidden");
+            }
+        }
+        else
+        {
+            conditionsDropdownDiv.classList.remove("active");
+            for (let i = 0; i < conditionsOptions.length; i++)
+            {
+                const elm = conditionsOptions[i];
+                if (!elm.firstChild.checked)
+                {
+                    elm.classList.add("hidden");
+                }
+                else
+                {
+                    elm.classList.remove("hidden");
+                    boxexChecked = true;
+                }
+            }
+        }
+
+        if (!boxexChecked && !dropdownVisible)
+        {
+            conditionsDropdownUl.style.display = "none";
+        }
+        else
+        {
+            conditionsDropdownUl.style.display = null;
+        }
+    };
+
+    for (let i = 0; i < conditionsOptions.length; i++)
+    {
+        const opt = conditionsOptions[i];
+        opt.classList.add("hidden");
+        opt.addEventListener("click", EnsureDropdownVisibility);
+        conditionsDropdownUl.appendChild(opt);
+    }
+
+    EnsureDropdownVisibility();
+
+    conditionsDropdownDiv.appendChild(conditionsDropdownSpan);
+    conditionsDropdownDiv.appendChild(conditionsDropdownUl);
     // conditionsDropdownUl.tabIndex = "10";
     // conditionsDropdownUl.style.display = "none";
 
-    // var dropdownVisible = false;
-    // conditionsDropdownSpan.addEventListener("click", () => 
-    // {
-    //     if (dropdownVisible)
-    //     {
-    //         conditionsDropdownUl.style.display = null;
-    //     }
-    //     else
-    //     {
-    //         conditionsDropdownUl.style.display = "none";
-    //     }
-    //     dropdownVisible = !dropdownVisible;
-    // });
+
+    var dropdownVisible = false;
+    conditionsDropdownSpan.addEventListener("click", () => 
+    {
+        dropdownVisible = !dropdownVisible;
+        EnsureDropdownVisibility();
+    });
     // conditionsDropdownDiv.addEventListener("blur", () => {conditionsDropdownUl.style.display = "none"; dropdownVisible = false;});
 
-    // tds[3].appendChild(conditionsDropdownDiv);
+    tds[3].appendChild(conditionsDropdownDiv);
 
     var textarea = document.createElement("textarea");
     textarea.classList.add("notes");
@@ -272,26 +324,6 @@ var round = 1;
         UpdateCurrentTurnDisplay();
     });
 
-
-    var checkboxDropdowns = document.getElementsByClassName("dropdown-check-list");
-    for (let i = 0; i < checkboxDropdowns.length; i++)
-    {
-        const drop = checkboxDropdowns[i];
-        const ul = drop.querySelector("ul");
-
-        drop.querySelector("span").addEventListener("click", () => 
-        {
-            if (ul.style.display == "none")
-            {
-                ul.style.display = null;
-            }
-            else
-            {
-                ul.style.display = "none";
-            }
-        });
-        drop.addEventListener("blur", () => {ul.style.display = "none"});
-    }
 })();
 
 

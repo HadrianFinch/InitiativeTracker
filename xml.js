@@ -19,6 +19,8 @@ function LoadInititiveOrderFromXml(xmlText)
         slot.maxHP = parseInt(elm.getAttribute("maxHP"));
         slot.notes = elm.getAttribute("notes");
 
+        slot.conditions = JSON.parse(elm.getAttribute("conditions"));
+
         slots.push(slot);
     }
 
@@ -32,12 +34,10 @@ function LoadInititiveOrderFromXml(xmlText)
         existingRow.remove();
     }
 
-    console.log("Loading " + slots.length + " slots.");
-
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        AddRow(slot.inititive, slot.name, slot.currentHP, slot.maxHP, slot.notes);
+        AddRow(slot.inititive, slot.name, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
     }
 
     currentTurn = turn;
@@ -115,6 +115,21 @@ function SaveInititiveToFile()
         slot.maxHP = row.querySelector(".hpBox div:nth-child(2) input").value;
         slot.notes = row.querySelector(".notes").value;
 
+        const conditionsElm = row.querySelector(".conditions ul")
+        slot.conditions = [];
+        for (let i = 0; i < conditionsElm.children.length; i++)
+        {
+            const elm = conditionsElm.children[i].firstChild;
+            if (elm.checked)
+            {
+                slot.conditions.push(true);
+            }
+            else
+            {
+                slot.conditions.push(false);
+            }
+        }
+
         slot.currentHP = slot.currentHP.substr(0, slot.currentHP.length - 2);
 
         slots.push(slot);
@@ -124,7 +139,7 @@ function SaveInititiveToFile()
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        var line = `    <slot inititive=\"${slot.inititive}\" name=\"${slot.name}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\"></slot>`;
+        var line = `    <slot inititive=\"${slot.inititive}\" name=\"${slot.name}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
         slotLines.push(line);
     }
 
