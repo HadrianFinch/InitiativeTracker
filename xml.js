@@ -1,4 +1,4 @@
-function LoadInititiveOrderFromXml(xmlText)
+function LoadinitiativeOrderFromXml(xmlText)
 {
     var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -13,7 +13,7 @@ function LoadInititiveOrderFromXml(xmlText)
         const elm = slotElms[i];
 
         const slot = {};
-        slot.inititive = parseInt(elm.getAttribute("inititive"));
+        slot.initiative = parseInt(elm.getAttribute("initiative"));
         slot.name = elm.getAttribute("name");
         slot.currentHP = parseInt(elm.getAttribute("currentHP"));
         slot.maxHP = parseInt(elm.getAttribute("maxHP"));
@@ -24,8 +24,8 @@ function LoadInititiveOrderFromXml(xmlText)
         slots.push(slot);
     }
 
-    turn = parseInt(xmlDoc.getElementsByTagName("inititive")[0].getAttribute("currentTurn"));
-    currentRound = parseInt(xmlDoc.getElementsByTagName("inititive")[0].getAttribute("currentTurn"));
+    turn = parseInt(xmlDoc.getElementsByTagName("initiative")[0].getAttribute("currentTurn"));
+    currentRound = parseInt(xmlDoc.getElementsByTagName("initiative")[0].getAttribute("currentTurn"));
     
     var table = document.querySelector("table");
     for (let i = 1; i < table.children.length; i++)
@@ -37,7 +37,7 @@ function LoadInititiveOrderFromXml(xmlText)
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        AddRow(slot.inititive, slot.name, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
+        AddRow(slot.initiative, slot.name, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
     }
 
     currentTurn = turn;
@@ -96,7 +96,7 @@ function Download(filename, text)
     }
 }
 
-function SaveInititiveToFile()
+function SaveinitiativeToFile()
 {
     const slots = [];
     var turn = currentTurn;
@@ -109,7 +109,7 @@ function SaveInititiveToFile()
         const row = table.children[i];
 
         const slot = {};
-        slot.inititive = row.querySelector(".inititive").value;
+        slot.initiative = row.querySelector(".initiative").value;
         slot.name = row.querySelector(".name").value;
         slot.currentHP = row.querySelector(".hpBox div:nth-child(2) h1").innerHTML;
         slot.maxHP = row.querySelector(".hpBox div:nth-child(2) input").value;
@@ -139,25 +139,25 @@ function SaveInititiveToFile()
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        var line = `    <slot inititive=\"${slot.inititive}\" name=\"${slot.name}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
+        var line = `    <slot initiative=\"${slot.initiative}\" name=\"${slot.name}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
         slotLines.push(line);
     }
 
-    var xmlString = `<inititive currentTurn=\"${turn}\" round=\"${currentRound}\">\n`;
+    var xmlString = `<initiative currentTurn=\"${turn}\" round=\"${currentRound}\">\n`;
     for (let i = 0; i < slotLines.length; i++)
     {
         const line = slotLines[i];
         xmlString += line + "\n";
     }
 
-    xmlString += "</inititive>";
+    xmlString += "</initiative>";
 
-    Download(`${slots.length} turn combat.inititive`, xmlString);
+    Download(`${slots.length} turn combat.initiative`, xmlString);
 }
 
 (() => {
-    var loadButton = document.querySelector(".loadInititive");
-    var saveButton = document.querySelector(".saveInititive");
+    var loadButton = document.querySelector(".loadinitiative");
+    var saveButton = document.querySelector(".saveinitiative");
     
     var filePicker = document.querySelector("#filepicker");
     
@@ -165,7 +165,7 @@ function SaveInititiveToFile()
     {
         loadFileToText(filePicker, (text) =>
         {
-            LoadInititiveOrderFromXml(text);
+            LoadinitiativeOrderFromXml(text);
         });
     });
 
@@ -176,9 +176,9 @@ function SaveInititiveToFile()
 
     saveButton.addEventListener("click", () => 
     {
-        SaveInititiveToFile();
+        SaveinitiativeToFile();
     });
 })();
-// LoadInititiveOrderFromXml("<inititive>\
-// <slot inititive=\"12\" name=\"spooky Firemage\" currentHP=\"35\" maxHP=\"67\" notes=\"\"></slot>\
-// </inititive>");
+// LoadinitiativeOrderFromXml("<initiative>\
+// <slot initiative=\"12\" name=\"spooky Firemage\" currentHP=\"35\" maxHP=\"67\" notes=\"\"></slot>\
+// </initiative>");

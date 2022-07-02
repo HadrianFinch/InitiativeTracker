@@ -36,7 +36,7 @@ table
     padding-bottom: 10pt;
 } */
 
-.inititive
+.initiative
 {
     width: 45pt;
     text-align: center;
@@ -128,7 +128,7 @@ table
     overflow-y: visible;
     background-color: red;
 }
-.inititiveSlot.active
+.initiativeSlot.active
 {
     outline: mediumblue solid 3pt;
 }

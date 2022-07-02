@@ -55,17 +55,17 @@ function CreateOption(name)
     return opt;
 }
 
-function AddRow(inititive = null, name = "", currentHP = 0, maxHP = null, notes = "", conditions = null)
+function AddRow(initiative = null, name = "", currentHP = 0, maxHP = null, notes = "", conditions = null)
 {
     var elm = document.createElement("tr");
-    elm.classList.add("inititiveSlot");
+    elm.classList.add("initiativeSlot");
 
     var tds = [CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD()];
 
     var initInput = document.createElement("input");
     initInput.type = "number";
-    initInput.value = inititive;
-    initInput.classList.add("inititive");
+    initInput.value = initiative;
+    initInput.classList.add("initiative");
     tds[0].appendChild(initInput);
     
     var nameInput = document.createElement("input");
