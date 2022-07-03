@@ -55,7 +55,7 @@ function CreateOption(name)
     return opt;
 }
 
-function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = null, notes = "", conditions = null)
+function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = null, tempHP = null, notes = "", conditions = null)
 {
     var elm = document.createElement("tr");
     elm.classList.add("initiativeSlot");
@@ -138,18 +138,23 @@ function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = 
     
     hpBox.appendChild(hpInfo);
 
-    // var tempHPdiv = document.createElement("div");
-    // var tempHPspan = document.createElement("span");
+    var tempHPdiv = document.createElement("div");
+    var tempHPspan = document.createElement("span");
 
-    // tempHPspan.innerHTML = "Temp HP  ";
+    tempHPspan.innerHTML = "Temp HP  ";
 
-    // var tempHPinput = document.createElement("input");
-    // tempHPinput.type = "number";
+    var tempHPinput = document.createElement("input");
+    tempHPinput.type = "number";
 
-    // tempHPspan.appendChild(tempHPinput);
-    // tempHPdiv.appendChild(tempHPspan);
+    if (tempHP != null)
+    {
+        tempHPinput.value = tempHP;
+    }
 
-    // hpBox.appendChild(tempHPdiv);
+    tempHPspan.appendChild(tempHPinput);
+    tempHPdiv.appendChild(tempHPspan);
+
+    hpBox.appendChild(tempHPdiv);
 
     tds[3].appendChild(hpBox);
 
@@ -321,8 +326,22 @@ function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = 
 
         if (((hpChangesBox.value != "") && (hpChangesBox.value != null)) && ((maxHPinput.value != "") && (maxHPinput.value != null)))
         {
+            if (tempHPinput.value != "")
+            {
+                if (parseInt(tempHPinput.value) > parseInt(hpChangesBox.value))
+                {
+                    tempHPinput.value = parseInt(tempHPinput.value) - parseInt(hpChangesBox.value);
+                    hpChangesBox.value = "0";
+                }
+                else
+                {
+                    var overflow = parseInt(hpChangesBox.value) - parseInt(tempHPinput.value);
+                    tempHPinput.value = "";
+                    hpChangesBox.value = overflow;
+                }
+            }
             var proposedHP = clamp((currentHP - parseInt(hpChangesBox.value)), 0, maxHP);
-    
+
             h1.innerHTML = proposedHP + " /";
             hpChangesBox.value = "";
         }
@@ -343,7 +362,7 @@ var round = 1;
 (() => 
 {
     AddRow();
-    
+
     const table = document.querySelector("table");
 
     document.querySelector(".addSlot").addEventListener("click", () => {AddRow();});
@@ -367,7 +386,6 @@ var actionsMenuOpen = true;
 
 document.querySelector(".actionsMenu p").addEventListener("click", () => 
 {
-    console.log("clonk");
     SetPopupState(!actionsMenuOpen);
 });
 
