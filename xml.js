@@ -18,8 +18,7 @@ function LoadinitiativeOrderFromXml(xmlText)
         slot.currentHP = parseInt(elm.getAttribute("currentHP"));
         slot.maxHP = parseInt(elm.getAttribute("maxHP"));
         slot.notes = elm.getAttribute("notes");
-        slot.tempHP = elm.getAttribute("tempHP");
-
+        
         slot.ac = elm.getAttribute("AC");
         if ((slot.ac == null) || (slot.ac == ""))
         {
@@ -28,6 +27,16 @@ function LoadinitiativeOrderFromXml(xmlText)
         else
         {
             slot.ac = parseInt(slot.ac);
+        }
+        
+        slot.tempHP = elm.getAttribute("tempHP");
+        if ((slot.tempHP == null) || (slot.tempHP == ""))
+        {
+            slot.tempHP = null;
+        }
+        else
+        {
+            slot.tempHP = parseInt(slot.tempHP);
         }
 
         slot.conditions = JSON.parse(elm.getAttribute("conditions"));
