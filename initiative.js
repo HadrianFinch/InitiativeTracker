@@ -95,9 +95,7 @@ function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = 
 
     ACdiv.appendChild(ACShield);
     
-
     tds[2].appendChild(ACdiv);
-
 
     var hpBox = document.createElement("div");
     hpBox.classList.add("hpBox");
