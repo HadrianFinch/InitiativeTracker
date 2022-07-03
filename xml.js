@@ -19,6 +19,16 @@ function LoadinitiativeOrderFromXml(xmlText)
         slot.maxHP = parseInt(elm.getAttribute("maxHP"));
         slot.notes = elm.getAttribute("notes");
 
+        slot.ac = elm.getAttribute("AC");
+        if ((slot.ac == null) || (slot.ac == ""))
+        {
+            slot.ac = null;
+        }
+        else
+        {
+            slot.ac = parseInt(slot.ac);
+        }
+
         slot.conditions = JSON.parse(elm.getAttribute("conditions"));
 
         slots.push(slot);
@@ -37,7 +47,7 @@ function LoadinitiativeOrderFromXml(xmlText)
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        AddRow(slot.initiative, slot.name, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
+        AddRow(slot.initiative, slot.name, slot.ac, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
     }
 
     currentTurn = turn;
@@ -114,6 +124,7 @@ function SaveinitiativeToFile()
         slot.currentHP = row.querySelector(".hpBox div:nth-child(2) h1").innerHTML;
         slot.maxHP = row.querySelector(".hpBox div:nth-child(2) input").value;
         slot.notes = row.querySelector(".notes").value;
+        slot.ac = row.querySelector(".ACBox input").value;
 
         const conditionsElm = row.querySelector(".conditions ul")
         slot.conditions = [];
@@ -139,7 +150,7 @@ function SaveinitiativeToFile()
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        var line = `    <slot initiative=\"${slot.initiative}\" name=\"${slot.name}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
+        var line = `    <slot initiative=\"${slot.initiative}\" name=\"${slot.name}\" AC=\"${slot.ac}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
         slotLines.push(line);
     }
 

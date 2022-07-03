@@ -55,12 +55,12 @@ function CreateOption(name)
     return opt;
 }
 
-function AddRow(initiative = null, name = "", currentHP = 0, maxHP = null, notes = "", conditions = null)
+function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = null, notes = "", conditions = null)
 {
     var elm = document.createElement("tr");
     elm.classList.add("initiativeSlot");
 
-    var tds = [CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD()];
+    var tds = [CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD(), CreateTD()];
 
     var initInput = document.createElement("input");
     initInput.type = "number";
@@ -74,6 +74,30 @@ function AddRow(initiative = null, name = "", currentHP = 0, maxHP = null, notes
     nameInput.value = name;
     nameInput.classList.add("name");
     tds[1].appendChild(nameInput);
+
+
+    // AC box
+    var ACdiv = document.createElement("div");
+    ACdiv.classList.add("ACBox");
+
+    var ACShield = document.createElement("h1");
+    ACShield.innerHTML = "<i class=\"fa-solid fa-shield\"></i>";
+
+    var ACInput = document.createElement("input");
+    ACInput.type = "number";
+
+    if (ac != null)
+    {
+        ACInput.value = ac;
+    }
+
+    ACdiv.appendChild(ACInput);
+
+    ACdiv.appendChild(ACShield);
+    
+
+    tds[2].appendChild(ACdiv);
+
 
     var hpBox = document.createElement("div");
     hpBox.classList.add("hpBox");
@@ -113,11 +137,23 @@ function AddRow(initiative = null, name = "", currentHP = 0, maxHP = null, notes
     }
 
     hpInfo.appendChild(maxHPinput);
-
+    
     hpBox.appendChild(hpInfo);
 
-    tds[2].appendChild(hpBox);
+    // var tempHPdiv = document.createElement("div");
+    // var tempHPspan = document.createElement("span");
 
+    // tempHPspan.innerHTML = "Temp HP  ";
+
+    // var tempHPinput = document.createElement("input");
+    // tempHPinput.type = "number";
+
+    // tempHPspan.appendChild(tempHPinput);
+    // tempHPdiv.appendChild(tempHPspan);
+
+    // hpBox.appendChild(tempHPdiv);
+
+    tds[3].appendChild(hpBox);
 
     var conditionsDropdownDiv = document.createElement("div");
     conditionsDropdownDiv.classList.add("conditions");
@@ -222,18 +258,18 @@ function AddRow(initiative = null, name = "", currentHP = 0, maxHP = null, notes
     });
     // conditionsDropdownDiv.addEventListener("blur", () => {conditionsDropdownUl.style.display = "none"; dropdownVisible = false;});
 
-    tds[3].appendChild(conditionsDropdownDiv);
+    tds[4].appendChild(conditionsDropdownDiv);
 
     var textarea = document.createElement("textarea");
     textarea.classList.add("notes");
     textarea.value = notes;
 
-    tds[4].appendChild(textarea);
+    tds[5].appendChild(textarea);
 
     var deleteButton = document.createElement("button");
     deleteButton.innerHTML = "<i class=\"fa fa-trash\"></i>";
     deleteButton.classList.add("deleteButton");
-    tds[5].appendChild(deleteButton);
+    tds[6].appendChild(deleteButton);
 
     var table = document.querySelector("table");
 
