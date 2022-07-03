@@ -277,6 +277,7 @@ function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = 
     elm.appendChild(tds[3]);
     elm.appendChild(tds[4]);
     elm.appendChild(tds[5]);
+    elm.appendChild(tds[6]);
 
     table.appendChild(elm);
     
@@ -361,30 +362,33 @@ var round = 1;
 })();
 
 
-var popup = document.querySelector(".popup");
-var popupOpen = false;
+var actionsMenu = document.querySelector(".actionsMenu");
+var actionsMenuOpen = true;
 
-popup.addEventListener("click", () => 
+document.querySelector(".actionsMenu p").addEventListener("click", () => 
 {
-    SetPopupState(!popupOpen);
+    console.log("clonk");
+    SetPopupState(!actionsMenuOpen);
 });
 
-for (let i = 0; i < popup.children[1].children.length; i++)
-{
-    const child = popup.children[1].children[i];
-    child.addEventListener("click", (e) => {e.stopPropagation();});
-}
-
+// for (let i = 0; i < popup.children[1].children.length; i++)
+// {
+    //     const child = popup.children[1].children[i];
+    //     child.addEventListener("click", (e) => {e.stopPropagation();});
+    // }
+    
 function SetPopupState(state)
 {
-    popupOpen = state;
+    actionsMenuOpen = state;
     if (state)
     {
-        popup.classList.add("active");
+        document.querySelector(".actionsMenu p").innerHTML = "^";
+        actionsMenu.classList.remove("minimized");
     }
     else
     {
-        popup.classList.remove("active");
+        document.querySelector(".actionsMenu p")    .innerHTML = "/<br>\\";
+        actionsMenu.classList.add("minimized");
     }
 }
 
