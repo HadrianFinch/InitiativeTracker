@@ -18,7 +18,7 @@ function LoadinitiativeOrderFromXml(xmlText)
         slot.currentHP = parseInt(elm.getAttribute("currentHP"));
         slot.maxHP = parseInt(elm.getAttribute("maxHP"));
         slot.notes = elm.getAttribute("notes");
-
+        
         slot.ac = elm.getAttribute("AC");
         if ((slot.ac == null) || (slot.ac == ""))
         {
@@ -27,6 +27,16 @@ function LoadinitiativeOrderFromXml(xmlText)
         else
         {
             slot.ac = parseInt(slot.ac);
+        }
+        
+        slot.tempHP = elm.getAttribute("tempHP");
+        if ((slot.tempHP == null) || (slot.tempHP == ""))
+        {
+            slot.tempHP = null;
+        }
+        else
+        {
+            slot.tempHP = parseInt(slot.tempHP);
         }
 
         slot.conditions = JSON.parse(elm.getAttribute("conditions"));
@@ -47,7 +57,7 @@ function LoadinitiativeOrderFromXml(xmlText)
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        AddRow(slot.initiative, slot.name, slot.ac, slot.currentHP, slot.maxHP, slot.notes, slot.conditions);
+        AddRow(slot.initiative, slot.name, slot.ac, slot.currentHP, slot.maxHP, slot.tempHP, slot.notes, slot.conditions);
     }
 
     currentTurn = turn;
@@ -125,6 +135,7 @@ function SaveinitiativeToFile()
         slot.maxHP = row.querySelector(".hpBox div:nth-child(2) input").value;
         slot.notes = row.querySelector(".notes").value;
         slot.ac = row.querySelector(".ACBox input").value;
+        slot.tempHP = row.querySelector(".hpBox div:nth-child(3) input").value;
 
         const conditionsElm = row.querySelector(".conditions ul")
         slot.conditions = [];
@@ -150,7 +161,7 @@ function SaveinitiativeToFile()
     for (let i = 0; i < slots.length; i++)
     {
         const slot = slots[i];
-        var line = `    <slot initiative=\"${slot.initiative}\" name=\"${slot.name}\" AC=\"${slot.ac}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
+        var line = `    <slot initiative=\"${slot.initiative}\" name=\"${slot.name}\" AC=\"${slot.ac}\" currentHP=\"${slot.currentHP}\" maxHP=\"${slot.maxHP}\" tempHP=\"${slot.tempHP}\" notes=\"${slot.notes}\" conditions=\"${JSON.stringify(slot.conditions)}\"></slot>`;
         slotLines.push(line);
     }
 
