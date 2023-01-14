@@ -137,20 +137,23 @@ function AddRow(initiative = null, name = "", ac = null, currentHP = 0, maxHP = 
     hpInfo.appendChild(maxHPinput);
     
     hpBox.appendChild(hpInfo);
-
+    
     var tempHPdiv = document.createElement("div");
     var tempHPspan = document.createElement("span");
 
-    tempHPspan.innerHTML = "Temp HP  ";
-
     var tempHPinput = document.createElement("input");
     tempHPinput.type = "number";
+    
+    var tempHPText = document.createElement("span");
+    tempHPText.innerHTML = "Temp HP ";
+    tempHPText.classList.add("tempHPInput");
 
     if (tempHP != null)
     {
         tempHPinput.value = tempHP;
     }
 
+    tempHPspan.appendChild(tempHPText);
     tempHPspan.appendChild(tempHPinput);
     tempHPdiv.appendChild(tempHPspan);
 

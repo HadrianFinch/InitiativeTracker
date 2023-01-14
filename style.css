@@ -57,6 +57,10 @@ table
     min-height: 45pt;
 }
 
+.hpBox
+{
+    width: 100pt;
+}
 .hpBox div
 {
     float: left;
@@ -124,7 +128,7 @@ table
 
 .hpBox
 {
-    height: 35pt;
+    width: 180pt;
 }
 
 .hpBox div:nth-child(3) span
@@ -360,4 +364,9 @@ table
 .actionsMenu div a, .actionsMenu div a:visited
 {
     color: black;
+}
+
+.tempHPInput
+{
+    float: right;
 }
